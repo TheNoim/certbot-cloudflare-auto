@@ -1,3 +1,5 @@
+import { setInterval } from 'timers';
+
 const fs = require('fs');
 const os = require('os');
 const path = require('path');
@@ -72,7 +74,18 @@ console.log("Successfully!");
 
 console.log(`Start generating certificates. Selected domains: ${(config.domains || []).join(', ')}`);
 
-generateCertificates().catch(e => {
+
+setInterval();
+
+generateCertificates().then(() => {
+    setInterval(() => {
+        generateCertificates().catch(e => {
+            console.error('An error occurred while generating the certificates.');
+            console.error(e);
+            process.exit(4);
+        });
+    }, 1000 * 60 * 24);
+}).catch(e => {
     console.error('An error occurred while generating the certificates.');
     console.error(e);
     process.exit(4);
@@ -112,6 +125,6 @@ async function generateCertificates() {
         process.exit(1);
     } else {
         console.log('Successfully.');
-        process.exit(0);
     }
+    return;
 }
