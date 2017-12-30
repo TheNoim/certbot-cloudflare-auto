@@ -73,8 +73,6 @@ console.log("Successfully!");
 console.log(`Start generating certificates. Selected domains: ${(config.domains || []).join(', ')}`);
 
 
-setInterval();
-
 generateCertificates().then(() => {
     setInterval(() => {
         generateCertificates().catch(e => {
