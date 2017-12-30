@@ -8,7 +8,7 @@ function genCommand({email, domain, credentials}) {
     command += `--cert-path /opt/certs/${domain}/cert.pem `;
     command += `--key-path /opt/certs/${domain}/privkey.pem `;
     command += `--fullchain-path /opt/certs/${domain}/fullchain.pem `;
-    command += `--chain-path /opt/certs/${domain}/chain.pem `;
+    command += `--chain-path /opt/certs/${domain}/chain.pem`;
     return command;
 }
 
