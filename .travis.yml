@@ -1,0 +1,19 @@
+sudo: required
+services:
+- docker
+env:
+  global:
+  - COMMIT=${TRAVIS_COMMIT::8}
+  - REPO=3003/certbot-cloudflare
+  - secure: QIAyHzG93cn2yY3oUEoFG8xnd7CC0gAT1/3Z8fhze/saLEJvcz6wuL+aXkfefIPmPArjmcERNIGHsChA8RnvDqMZYE2x2JSo2fCeytTcT6phZunCzPDZWCrqB0Ye/i5N8jC+bBgo0FrU7DqboRHKMIJatEA5VpD6MdtWOiQFf6IT+eHePMT1U6CTL7IIk+qovMniOxbzm25v4TgHW/WB+v+12Ku6KO/Bytpr+iUcmbjgIw0Z43GXnK65hwfax79UigKo7GT1+gKRhI2NiD53ZXimWpTZkPGlsRRYrKeBc2HfCgWDp4TsmRToOacLayIvDGN9AFzFId/b0HXz0VLvCTvz1PfJfu0m7JMbnRfGzpsS/R310ZbsyK7HHm0lgiFsEJ0Be8TmR/r7j4ysxtMpifNxLXAY1rrdxD+2osOiSXJdgQos+9AdakTzzhTnIHZzTwO1esVpIGbuF3ORYa6Rki+rFH++14LLPJ1x65Iak+zKx5jCn38n0sjUYU90/BUFOBz8SxSDS5QciJJtHHDH6kxiTUY826bNxKX19fiIm4hQ9rYC03sOQ2xbfH5eFf8BHtdAymQ2ChmYv6KbNkVYY3YlSu29qihjBtaIFcBsQcT3a2eSn7WuCX1mWXjrmNV1cnSa4B7MU56u30taoZmtizEEUmIp1MsKQGeuiqLAOD4=
+  - secure: ApahSS2u4dKZ7VBeKEVJizspExP2Rhd3aS1aE6PZzOnzpUrGumsVjB3wjhbWmbrVzMo0qlWjFg4ZUXF8afwVH10MK4WKn/h0zQKuSczCLoc+HsL2Cuqp6N0QGRmpqEDmulAVrmoUS30qWxcTXDp1a36uVm2UPag54SleiVk8SaoQgZDNpJ3nOo3KZkUT2KC+Hd8fkVSBMBXVL8xW2LTbuf+QaRcNZL/zCea8618WvqEG3sk+RuIBG7Lx8IvOCaB5xK0mpqR4XzFNUppD67Loxd1YGrifdKqCb5QogTX9JRbPLa4USZyf+9p1XlYyYYWhsfbNei0lfZRBMFgk8GUzJWAc1+6/fbBfObAr5GfcwTP0kvwYP54fW5PAPD/SbOtBR7G3p7UMU2Y5szzS4Tfisi4Yq81xgNDQV6sPUR6WAszNc72EKYl/uFtxK4SQw9X/0c7B4udPqg6xAbypci1A5bltWZ48SCUYNtpH5wMKn1j8MMBzs3N0fffti0Wldmu+v1+/J9f1u+Yoes1584UmTJxWNljQW1kbxOQhtJUpl9t3ALcHkyJv6MIdcVG1fxztpUff7xkpnhyvT3tYmrgJm6EKJ+hV6eqsszb4ME0zM0ArRvU7Fc9sWeAFHlkLdUFWJQNFEBckbxeGL7Qtz0nxhl+TrdH9JRNPHd2assy3m0w=
+script:
+- export TAG=`if [[ $TRAVIS_PULL_REQUEST == "false" ]] && [[ $TRAVIS_BRANCH == "master"
+  ]]; then echo "latest"; else echo dev; fi`
+- docker build -t $REPO:$TAG -f Dockerfile .
+after_success:
+- docker login -u $DOCKER_USER -p $DOCKER_PASS
+- if [[ $TRAVIS_PULL_REQUEST == "false" ]] && [[ $TRAVIS_BRANCH == "master" ]]; then
+  docker tag $REPO:$TAG $REPO:$TRAVIS_BUILD_NUMBER; docker push $REPO:$TRAVIS_BUILD_NUMBER;
+  fi
+- docker push $REPO:$TAG
