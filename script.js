@@ -3,8 +3,8 @@ const os = require('os');
 const path = require('path');
 const { spawn } = require('child_process');
 
-function command({email, domain, credentials}) {
-    const command = `certbot certonly --non-interactive --dns-cloudflare --dns-cloudflare-credentials ${credentials} --agree-tos -m ${email} -d ${domain}`;
+function genCommand({email, domain, credentials}) {
+    let command = `certbot certonly --non-interactive --dns-cloudflare --dns-cloudflare-credentials ${credentials} --agree-tos -m ${email} -d ${domain}`;
     command += `--cert-path /opt/certs/${domain}/cert.pem`;
     command += `--key-path /opt/certs/${domain}/privkey.pem`;
     command += `--fullchain-path /opt/certs/${domain}/fullchain.pem`;
@@ -82,7 +82,7 @@ async function generateCertificates() {
     const failed = [];
     for (const domain of config.domains || []) {
         console.log(`Domain: ${domain}`);
-        const command = command({email: config.email, domain, credentials});
+        const command = genCommand({email: config.email, domain, credentials});
         console.log(`Run: ${command}`);
         const args = command.split(' ');
         args.shift();
