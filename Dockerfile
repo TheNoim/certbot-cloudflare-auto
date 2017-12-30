@@ -17,4 +17,4 @@ RUN pip install certbot -U
 RUN certbot plugins
 RUN npm install
 
-CMD ['node', 'script.js']
+CMD ["node", "script.js"]
