@@ -4,11 +4,11 @@ const path = require('path');
 const { spawn } = require('child_process');
 
 function genCommand({email, domain, credentials}) {
-    let command = `certbot certonly --non-interactive --dns-cloudflare --dns-cloudflare-credentials ${credentials} --agree-tos -m ${email} -d ${domain}`;
-    command += `--cert-path /opt/certs/${domain}/cert.pem`;
-    command += `--key-path /opt/certs/${domain}/privkey.pem`;
-    command += `--fullchain-path /opt/certs/${domain}/fullchain.pem`;
-    command += `--chain-path /opt/certs/${domain}/chain.pem`;
+    let command = `certbot certonly --non-interactive --dns-cloudflare --dns-cloudflare-credentials ${credentials} --agree-tos -m ${email} -d ${domain} `;
+    command += `--cert-path /opt/certs/${domain}/cert.pem `;
+    command += `--key-path /opt/certs/${domain}/privkey.pem `;
+    command += `--fullchain-path /opt/certs/${domain}/fullchain.pem `;
+    command += `--chain-path /opt/certs/${domain}/chain.pem `;
     return command;
 }
 
